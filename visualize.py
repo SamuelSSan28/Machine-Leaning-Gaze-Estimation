@@ -1,3 +1,4 @@
+# UnityEyes eye/pupil visualization script
 # Run visualization script in the same directory as the .jpg/.json eye images, in the 'imgs' folder
 # visualized images will be saved in the same directory
 
