@@ -2,13 +2,16 @@
 # Run visualization script in the same directory as the .jpg/.json eye images, in the 'imgs' folder
 # visualized images will be saved in the same directory
 
+#!/usr/local/bin/python
 import cv2
 import numpy as np
 import json
 from glob import glob
 
+# Gather all .json files in local directory
 json_fns = glob("*.json")
 
+# Visualize eye information from corresponding json files
 for json_fn in json_fns:
 	# Print which eye .jpg is currently being visualized
 	print("visualizing eye: " + json_fn)
@@ -41,13 +44,17 @@ for json_fn in json_fns:
 
 	# Draw yellow gaze vector
 	look_vec = list(eval(data['eye_details']['look_vec']))
-
+	
 	eye_c = np.mean(ldmks_iris[:,:2], axis=0).astype(int)
 	look_vec[1] = -look_vec[1]
 	cv2.line(img, tuple(eye_c), tuple(eye_c+(np.array(look_vec[:2])*80).astype(int)), (0,0,0), 3)
 	cv2.line(img, tuple(eye_c), tuple(eye_c+(np.array(look_vec[:2])*80).astype(int)), (0,255,255), 2)
 
+	# Show the modified image in popup window
 	cv2.imshow("syntheseyes_img", img)
 	# Save visualized eye image
-	cv2.imwrite("annotated_%s.png"%json_fn[:-5], img) # [:-5]  =  everything except the last 5 items, doesn't seem to do anything?
-	cv2.waitKey(1)                                    # perhaps used as a safeguard so script never runs for more then XXXXX eye jpg/json
+	cv2.imwrite("annotated_%s.png"%json_fn[:-5], img) # [:-5]  =  everything except the last 5 items, ignore '.json'
+	# wait until key is pressed to close window
+	cv2.waitKey(0)    
+	# Close window after key press       
+	cv2.destroyAllWindows()  
